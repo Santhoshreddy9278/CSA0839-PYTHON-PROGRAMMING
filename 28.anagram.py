@@ -6,5 +6,3 @@ for ele in test_list:
     temp[str(sorted(ele))].append(ele)
 res = list(temp.values())
 print("The grouped Anagrams : " + str(res))
-
-
