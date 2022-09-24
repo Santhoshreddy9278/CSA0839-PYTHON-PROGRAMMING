@@ -1,24 +1,43 @@
-n = 3
-m = 3
-def countSquareMatrices(a, N, M):
-	
-	count = 0
+def movesToChessboard(board):
 
-	for i in range(1, N):
-		for j in range(1, M):
-			if (a[i][j] == 0):
-				continue
+	n = len(board)
+	for r in range(0, n):
+		for c in range(0, n):
+			if (board[0][0] ^ board[r][0] ^ board[0][r] ^ board[r][r] == 1):
+				return -1
 
-			
-			a[i][j] = min([a[i - 1][j],
-					a[i][j - 1], a[i - 1][j - 1]])+1
-	for i in range(N):
-		for j in range(M):
-			count += a[i][j]
+	rowsum = 0
+	colsum = 0
+	rowswap = 0
+	colswap = 0
+	for i in range(0, n):
+		rowsum += board[i][0]
+		colsum += board[0][i]
+		rowswap += board[i][0] == i % 2
+		colswap += board[0][i] == i % 2
+	if (rowsum != n // 2 and rowsum != (n + 1) // 2):
+		return -1
+	if (colsum != n // 2 and colsum != (n + 1) // 2):
+		return -1
+	if (n % 2):
+		if (rowswap % 2):
+			rowswap = n - rowswap
+		if (colswap % 2):
+			colswap = n - colswap
+	else:
+		rowswap = min(rowswap, n - rowswap)
+		colswap = min(colswap, n - colswap)
 
-	return count
-arr = [ [ 1, 0, 1],
-	[ 1, 1, 0 ],
-	[ 1, 1, 0 ] ]
+	return (rowswap + colswap) // 2
 
-print(countSquareMatrices(arr, n, m))
+
+
+arr = [[0, 1, 1, 0],[0, 1, 1, 0],[1, 0, 0, 1],[1, 0, 0, 1]]
+
+minswap = movesToChessboard(arr)
+
+print(arr)
+if (minswap == -1):
+	print("Impossible")
+else:
+	print(minswap)
